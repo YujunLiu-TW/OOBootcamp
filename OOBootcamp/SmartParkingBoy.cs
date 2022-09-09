@@ -11,7 +11,7 @@ public class SmartParkingBoy
 
     public ParkingLot Park(Vehicle vehicle)
     {
-        ParkingLot parkingLotWithMaxCount = null;
+        ParkingLot? parkingLotWithMaxCount = null;
         var maxAvailableCount = 0;
         _parkingLots.ForEach(p =>
         {
@@ -21,7 +21,11 @@ public class SmartParkingBoy
                 parkingLotWithMaxCount = p;
             }
         });
-        parkingLotWithMaxCount.ParkVehicle(vehicle);
+        if (!parkingLotWithMaxCount!.ParkVehicle(vehicle))
+        {
+            throw new Exception("all parking lots are full");
+        }
+
         return parkingLotWithMaxCount;
     }
 }
