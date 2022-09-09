@@ -104,18 +104,18 @@ public class GraduateBoyTest
     }
 
     [Test]
-    public void should_return_5_when_car_123_was_retrieved_from_parking_lot_A()
+    public void should_return_A_when_car_123_was_retrieved_from_parking_lot_A()
     {
         _parkingLots = new List<ParkingLot>
         {
-            new(1, 5, "A")
+            new(1, 5, "A"),
+            new(1,5,"B")
         };
         _graduateParkingBoy = new GraduateParkingBoy(_parkingLots);
         var vehicle = new Vehicle("123");
         _graduateParkingBoy.Park(vehicle);
-        var price = _graduateParkingBoy.Retrieve(vehicle);
-        Assert.IsInstanceOf<double>(price);
-        Assert.AreEqual(5.0d,price);
+        var parkingLot = _graduateParkingBoy.Retrieve(vehicle);
+        Assert.AreEqual("A",parkingLot.Name);
     }
     
     [Test]

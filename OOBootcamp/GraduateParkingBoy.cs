@@ -13,45 +13,48 @@ public class GraduateParkingBoy
     public ParkingLot Park(Vehicle vehicle)
     {
         ParkingLot? parkedLot = null;
-        foreach (var parkingLot in _parkingLots)
+        var index = 0;
+        for (int i = 0; i < _parkingLots.Count; i++)
         {
-            if (parkingLot.ParkVehicle(vehicle))
+            if (_parkingLots[i].ParkVehicle(vehicle))
             {
-                parkedLot = parkingLot;
+                parkedLot = _parkingLots[i];
+                index = i;
                 break;
             }
         }
 
         if (parkedLot != null)
         {
-            _parkingLots.Add(_parkingLots[0]);
-            _parkingLots.Remove(_parkingLots[0]);
+            _parkingLots.AddRange(_parkingLots.Take(index + 1));
+            _parkingLots.RemoveRange(0, index + 1);
             return parkedLot;
         }
 
         throw new Exception("all parking lots are full");
     }
 
-    public double Retrieve(Vehicle vehicle)
+    public ParkingLot Retrieve(Vehicle vehicle)
     {
-        var price = 0d;
-        var exceptionNumber = 0;
-        _parkingLots.ForEach(p =>
+        ParkingLot? parkedLot = null;
+        for (int i = 0; i < _parkingLots.Count; i++)
         {
             try
             {
-                price = p.RetrieveVehicle(vehicle);
+                _parkingLots[i].RetrieveVehicle(vehicle);
+                parkedLot = _parkingLots[i];
             }
             catch (Exception)
             {
-                exceptionNumber++;
+                // ignored
             }
-        });
-        if (exceptionNumber == _parkingLots.Count)
-        {
-            throw new Exception("cannot find this vehicle");
+
+            if (parkedLot != null)
+            {
+                break;
+            }
         }
 
-        return price;
+        return parkedLot ?? throw new Exception("cannot find this vehicle");
     }
 }
