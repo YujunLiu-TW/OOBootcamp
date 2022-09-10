@@ -3,29 +3,35 @@ namespace OOBootcamp;
 public class SmartParkingBoy
 {
     private readonly List<ParkingLot> _parkingLots;
+    private readonly Dictionary<Vehicle, int> _vehicleLocation;
 
-    public SmartParkingBoy(List<ParkingLot> parkingLots)
+    public SmartParkingBoy(List<ParkingLot> parkingLots, Dictionary<Vehicle, int> vehicleLocation)
     {
         _parkingLots = parkingLots;
+        _vehicleLocation = new Dictionary<Vehicle, int>(50);
     }
 
     public ParkingLot Park(Vehicle vehicle)
     {
-        ParkingLot? parkingLotWithMaxCount = null;
-        var maxAvailableCount = 0;
-        _parkingLots.ForEach(p =>
+        var maxAvailableCount = _parkingLots.Max(p => p.AvailableCount);
+        var parkingLotsDictionary = new Dictionary<ParkingLot, int>();
+        for (int i = 0; i < _parkingLots.Count; i++)
         {
-            if (p.AvailableCount >= maxAvailableCount)
+            if (_parkingLots[i].AvailableCount == maxAvailableCount)
             {
-                maxAvailableCount = p.AvailableCount;
-                parkingLotWithMaxCount = p;
+                parkingLotsDictionary.Add(_parkingLots[i], i);
             }
-        });
-        if (!parkingLotWithMaxCount!.ParkVehicle(vehicle))
-        {
-            throw new Exception("all parking lots are full");
         }
 
-        return parkingLotWithMaxCount;
+        var parkingLotWithMaxCount = parkingLotsDictionary.MaxBy(p => p.Key.AvailableCount / p.Key.MaxCapacity);
+
+        if (!parkingLotWithMaxCount.Key!.ParkVehicle(vehicle))
+        {
+            throw new NoParkingSlotAvailableException();
+        }
+
+        _vehicleLocation.Add(vehicle, parkingLotWithMaxCount.Value);
+
+        return parkingLotWithMaxCount.Key;
     }
 }

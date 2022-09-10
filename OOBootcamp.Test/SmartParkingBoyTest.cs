@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
@@ -8,6 +7,7 @@ public class SmartParkingBoyTest
 {
     private SmartParkingBoy _smartParkingBoy = null!;
     private List<ParkingLot> _parkingLots = null!;
+    private readonly Dictionary<Vehicle, int> _vehicleLocation = null!;
 
     [Test]
     public void should_park_in_A_when_parking_one_car_given_A_has_two_counts_and_B_has_one_count()
@@ -17,7 +17,7 @@ public class SmartParkingBoyTest
             new(2, 5, "A"),
             new(1, 5, "B")
         };
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
         var vehicle = new Vehicle("123");
 
         var parkingLot = _smartParkingBoy.Park(vehicle);
@@ -26,14 +26,14 @@ public class SmartParkingBoyTest
     }
 
     [Test]
-    public void should_park_in_A_And_A_when_parking_one_car_given_A_has_three_counts_and_B_has_one_count()
+    public void should_park_in_A_And_B_when_parking_one_car_given_B_has_highest_vacancy_rate()
     {
         _parkingLots = new List<ParkingLot>
         {
-            new(3, 5, "A"),
+            new(2, 5, "A"),
             new(1, 5, "B")
         };
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
         var vehicle1 = new Vehicle("123");
         var vehicle2 = new Vehicle("456");
 
@@ -41,7 +41,7 @@ public class SmartParkingBoyTest
         var parkingLot2 = _smartParkingBoy.Park(vehicle2);
 
         Assert.AreEqual("A", parkingLot1.Name);
-        Assert.AreEqual("A", parkingLot2.Name);
+        Assert.AreEqual("B", parkingLot2.Name);
     }
 
     [Test]
@@ -49,13 +49,16 @@ public class SmartParkingBoyTest
     {
         _parkingLots = new List<ParkingLot>
         {
-            new(0, 5, "A"),
-            new(0, 5, "B")
+            new(1, 5, "A"),
+            new(1, 5, "B")
         };
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
-        var vehicle = new Vehicle("123");
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
+        var vehicle1 = new Vehicle("123");
+        var vehicle2 = new Vehicle("456");
+        var vehicle3 = new Vehicle("789");
+        _smartParkingBoy.Park(vehicle1);
+        _smartParkingBoy.Park(vehicle2);
 
-        var exception = Assert.Throws<Exception>(() => _smartParkingBoy.Park(vehicle));
-        Assert.AreEqual("all parking lots are full", exception!.Message);
+        Assert.Throws<NoParkingSlotAvailableException>(() => _smartParkingBoy.Park(vehicle3));
     }
 }
