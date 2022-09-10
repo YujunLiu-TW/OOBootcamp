@@ -34,4 +34,14 @@ public class SmartParkingBoy
 
         return parkingLotWithMaxCount.Key;
     }
+
+    public double Retrieve(Vehicle vehicle)
+    {
+        if (_vehicleLocation.ContainsKey(vehicle))
+        {
+            return _parkingLots[_vehicleLocation[vehicle]].RetrieveVehicle(vehicle);
+        }
+
+        throw new VehicleNotFoundException(vehicle);
+    }
 }

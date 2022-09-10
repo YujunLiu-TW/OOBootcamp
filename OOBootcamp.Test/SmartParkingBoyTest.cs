@@ -61,4 +61,35 @@ public class SmartParkingBoyTest
 
         Assert.Throws<NoParkingSlotAvailableException>(() => _smartParkingBoy.Park(vehicle3));
     }
+
+    [Test]
+    public void should_return_A_when_car_123_was_retrieved_from_parking_lot_A()
+    {
+        _parkingLots = new List<ParkingLot>
+        {
+            new(1, 5, "A"),
+            new(1, 5, "B")
+        };
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
+        var vehicle = new Vehicle("123");
+        _smartParkingBoy.Park(vehicle);
+
+        var price = _smartParkingBoy.Retrieve(vehicle);
+
+        Assert.AreEqual(5, price);
+    }
+
+    [Test]
+    public void should_throw_exception_when_cannot_find_the_car()
+    {
+        _parkingLots = new List<ParkingLot>
+        {
+            new(1, 5, "A"),
+            new(1, 5, "B")
+        };
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
+        var vehicle = new Vehicle("123");
+
+        Assert.Throws<VehicleNotFoundException>(() => _smartParkingBoy.Retrieve(vehicle));
+    }
 }
