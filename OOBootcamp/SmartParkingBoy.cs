@@ -5,7 +5,7 @@ public class SmartParkingBoy
     private readonly List<ParkingLot> _parkingLots;
     private readonly Dictionary<Vehicle, int> _vehicleLocation;
 
-    public SmartParkingBoy(List<ParkingLot> parkingLots, Dictionary<Vehicle, int> vehicleLocation)
+    public SmartParkingBoy(List<ParkingLot> parkingLots)
     {
         _parkingLots = parkingLots;
         _vehicleLocation = new Dictionary<Vehicle, int>(50);

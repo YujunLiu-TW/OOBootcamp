@@ -7,7 +7,6 @@ public class SmartParkingBoyTest
 {
     private SmartParkingBoy _smartParkingBoy = null!;
     private List<ParkingLot> _parkingLots = null!;
-    private readonly Dictionary<Vehicle, int> _vehicleLocation = null!;
 
     [Test]
     public void should_park_in_A_when_parking_one_car_given_A_has_two_counts_and_B_has_one_count()
@@ -17,7 +16,7 @@ public class SmartParkingBoyTest
             new(2, 5, "A"),
             new(1, 5, "B")
         };
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
         var vehicle = new Vehicle("123");
 
         var parkingLot = _smartParkingBoy.Park(vehicle);
@@ -33,7 +32,7 @@ public class SmartParkingBoyTest
             new(2, 5, "A"),
             new(1, 5, "B")
         };
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
         var vehicle1 = new Vehicle("123");
         var vehicle2 = new Vehicle("456");
 
@@ -52,7 +51,7 @@ public class SmartParkingBoyTest
             new(1, 5, "A"),
             new(1, 5, "B")
         };
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
         var vehicle1 = new Vehicle("123");
         var vehicle2 = new Vehicle("456");
         var vehicle3 = new Vehicle("789");
@@ -70,7 +69,7 @@ public class SmartParkingBoyTest
             new(1, 5, "A"),
             new(1, 5, "B")
         };
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
         var vehicle = new Vehicle("123");
         _smartParkingBoy.Park(vehicle);
 
@@ -87,7 +86,7 @@ public class SmartParkingBoyTest
             new(1, 5, "A"),
             new(1, 5, "B")
         };
-        _smartParkingBoy = new SmartParkingBoy(_parkingLots, _vehicleLocation);
+        _smartParkingBoy = new SmartParkingBoy(_parkingLots);
         var vehicle = new Vehicle("123");
 
         Assert.Throws<VehicleNotFoundException>(() => _smartParkingBoy.Retrieve(vehicle));
